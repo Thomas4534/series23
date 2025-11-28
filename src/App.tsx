@@ -1,97 +1,247 @@
-import { Sparkles, Zap, Users, ArrowRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react'
+import Header from './Header'
+import Footer from './Footer'
+import News from './News'
+import Convo from './Convo'
+import Invitation from './invitation'
 
-function App() {
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <nav className="fixed top-0 w-full bg-black/80 backdrop-blur-sm border-b border-white/10 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-xl font-bold tracking-tight">Series</div>
-          <button className="px-5 py-2 bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors">
-            Join Waitlist
-          </button>
-        </div>
-      </nav>
+const words = ['founders', 'investors', 'lovers', 'friends']
 
-      <main className="pt-32 pb-20">
-        <section className="max-w-4xl mx-auto px-6 text-center mb-32">
-          <div className="inline-block mb-6 px-3 py-1 border border-white/20 rounded-full text-xs tracking-wide">
-            NOW IN BETA
-          </div>
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 tracking-tight leading-tight">
-            The AI Social Network
-          </h1>
-          <p className="text-xl text-white/60 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Connect, create, and collaborate with AI-powered conversations.
-            A new way to build meaningful connections.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <button className="px-8 py-3 bg-white text-black font-medium hover:bg-white/90 transition-all flex items-center gap-2 group">
-              Get Started
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="px-8 py-3 border border-white/20 hover:bg-white/5 transition-colors font-medium">
-              Learn More
-            </button>
-          </div>
-        </section>
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
 
-        <section className="max-w-5xl mx-auto px-6 grid md:grid-cols-3 gap-8 mb-32">
-          <div className="border border-white/10 p-8 hover:border-white/20 transition-colors">
-            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">AI-Native</h3>
-            <p className="text-white/60 leading-relaxed">
-              Built from the ground up with AI at its core. Experience conversations that adapt and evolve.
-            </p>
-          </div>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '-50px 0px -50px 0px'
+      }
+    )
 
-          <div className="border border-white/10 p-8 hover:border-white/20 transition-colors">
-            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-              <Zap className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Lightning Fast</h3>
-            <p className="text-white/60 leading-relaxed">
-              Real-time interactions powered by cutting-edge infrastructure. Zero lag, infinite possibilities.
-            </p>
-          </div>
+    if (ref.current) observer.observe(ref.current)
 
-          <div className="border border-white/10 p-8 hover:border-white/20 transition-colors">
-            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6">
-              <Users className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-semibold mb-3">Community First</h3>
-            <p className="text-white/60 leading-relaxed">
-              Join a growing network of creators, thinkers, and innovators shaping the future together.
-            </p>
-          </div>
-        </section>
+    return () => {
+      if (ref.current) observer.unobserve(ref.current)
+    }
+  }, [])
 
-        <section className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6 tracking-tight">Ready to join?</h2>
-          <p className="text-white/60 mb-8 text-lg">
-            Be part of the next generation of social networking.
-          </p>
-          <form className="flex gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-white/5 border border-white/10 focus:border-white/30 focus:outline-none transition-colors"
-            />
-            <button className="px-6 py-3 bg-white text-black font-medium hover:bg-white/90 transition-colors whitespace-nowrap">
-              Sign Up
-            </button>
-          </form>
-        </section>
-      </main>
-
-      <footer className="border-t border-white/10 py-8">
-        <div className="max-w-6xl mx-auto px-6 text-center text-white/40 text-sm">
-          © 2025 Series. The AI Social Network.
-        </div>
-      </footer>
-    </div>
-  );
+  return { ref, visible }
 }
 
-export default App;
+function App() {
+  const [currentWord, setCurrentWord] = useState(words[0])
+  const [width, setWidth] = useState<number | null>(null)
+  const measureRef = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    let index = 0
+    const interval = setInterval(() => {
+      index = (index + 1) % words.length
+      setCurrentWord(words[index])
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (measureRef.current) {
+      setWidth(measureRef.current.offsetWidth)
+    }
+  }, [currentWord])
+
+  const handleSeriesButtonClick = () => {
+    window.open('https://tv.series.so/', '_blank')
+  }
+
+  const feature1 = useScrollReveal()
+  const feature2 = useScrollReveal()
+  const feature3 = useScrollReveal()
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900 font-mono">
+
+      {/* ✅ Series Logo - Top Left */}
+      <div className="fixed top-5 left-6 z-50">
+        <div className="relative p-2 hover:scale-110 transition-transform duration-200 ease-out">
+          <img
+            src="/images/serieslogo.jpeg"
+            alt="Series Logo"
+            className="w-16 h-16 md:w-20 md:h-20 object-contain"
+          />
+        </div>
+      </div>
+
+      {/* Series Button - Top Right */}
+      <div className="fixed top-6 right-6 z-50">
+        <button
+          onClick={handleSeriesButtonClick}
+          className="relative p-2 hover:scale-110 transition-transform duration-200 ease-out"
+        >
+          <img
+            src="/images/theseries.svg"
+            alt="Series TV"
+            className="w-16 h-16 md:w-20 md:h-20"
+          />
+          <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
+        </button>
+      </div>
+
+      <div className="sticky top-0 z-40 bg-white">
+        <Header />
+      </div>
+
+      <main className="pt-20 pb-40">
+
+        {/* Featured In */}
+        <section className="max-w-5xl mx-auto px-6 mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
+            {[
+              'businessinsider.svg',
+              'complex.svg',
+              'entrepreneur.svg',
+              'forbes.svg',
+              'foxnews.svg',
+              'nbc.svg',
+            ].map((logo) => (
+              <img
+                key={logo}
+                src={`/images/${logo}`}
+                alt={logo}
+                className="h-6 md:h-8 object-contain opacity-80 grayscale-[30%] hover:opacity-100 hover:grayscale-0 hover:scale-105 transition-all duration-300 ease-out"
+              />
+            ))}
+          </div>
+        </section>
+
+        <Convo />
+
+        {/* Animated Headline */}
+        <section className="max-w-5xl mx-auto px-6 flex justify-center">
+          <h1 className="text-[32px] sm:text-[38px] md:text-[50px] lg:text-[65px] xl:text-[80px] font-semibold tracking-tight leading-tight whitespace-nowrap pb-40">
+            Connect with{' '}
+            <span
+              className="inline-block relative text-gray-500 align-bottom"
+              style={{
+                width: width ? `${width}px` : 'auto',
+                transition: 'width 0.6s ease'
+              }}
+            >
+              <span className="absolute inset-0 flex justify-center transition-opacity duration-300 ease-in-out">
+                {currentWord}
+              </span>
+              <span ref={measureRef} className="invisible whitespace-nowrap">
+                {currentWord}
+              </span>
+            </span>{' '}
+            instantly.
+          </h1>
+        </section>
+
+        {/* Features Section */}
+        <section className="max-w-6xl mx-auto px-6 space-y-24">
+
+          {/* Feature 1 */}
+          <div
+            ref={feature1.ref}
+            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
+            ${feature1.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-sm">
+                <img
+                  src="/images/iphone.jpg"
+                  alt="Series app on iPhone"
+                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                <img
+                  src="/images/chat.png"
+                  alt="Chat interface"
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 object-contain"
+                />
+              </div>
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
+                Intelligent Matching
+              </h2>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Series uses artificial intelligence to connect you with the right person at the right time.
+              </p>
+            </div>
+          </div>
+
+          {/* Feature 2 */}
+          <div
+            ref={feature2.ref}
+            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
+            ${feature2.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
+            <div className="space-y-6 md:pr-10">
+              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
+                Activate your Network
+              </h2>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Series strengthens your reach by activating the most valuable connections in your ecosystem.
+              </p>
+            </div>
+            <div className="flex items-center justify-center md:justify-end">
+              <div className="relative w-full max-w-sm">
+                <img
+                  src="/images/iphone.jpg"
+                  alt="Series app on iPhone"
+                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                <img
+                  src="/images/serieslogo.jpeg"
+                  alt="Series Logo"
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 object-contain"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 3 */}
+          <div
+            ref={feature3.ref}
+            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
+            ${feature3.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-sm">
+                <img
+                  src="/images/iphone.jpg"
+                  alt="Time saving"
+                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                <img
+                  src="/images/clock.jpg"
+                  alt="Time visual"
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 object-contain"
+                />
+              </div>
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
+                Stop Wasting Your Time
+              </h2>
+              <p className="text-gray-500 text-lg leading-relaxed">
+                Series saves you time by connecting you directly with the right person at the right time.
+              </p>
+            </div>
+          </div>
+
+        </section>
+
+        <News />
+        <Invitation />
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
+
+export default App
