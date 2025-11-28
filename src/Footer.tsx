@@ -1,8 +1,39 @@
 import { Twitter, Linkedin, ArrowUpRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '-20px 0px -20px 0px'
+      }
+    )
+
+    if (ref.current) observer.observe(ref.current)
+    return () => {
+      if (ref.current) observer.unobserve(ref.current)
+    }
+  }, [])
+
+  return { ref, visible }
+}
 
 function Footer() {
+  const reveal = useScrollReveal()
+
   return (
-    <footer className="border-t border-gray-300/80 py-12">
+    <footer
+      ref={reveal.ref}
+      className={`border-t border-gray-300/80 py-12 transition-all duration-500 ease-out transform
+        ${reveal.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+    >
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-gray-500 text-sm font-mono">
 
         {/* Left - Simplified */}

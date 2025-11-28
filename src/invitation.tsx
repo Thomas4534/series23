@@ -23,33 +23,35 @@ export default function Invitation() {
   const reveal = useScrollReveal()
 
   return (
-    <section className="py-20 px-6 bg-white font-mono text-gray-900">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-16 px-6 bg-white font-mono text-gray-900">
+      <div className="max-w-6xl mx-auto">
 
-        <div
-          ref={reveal.ref}
-          className={`transition-all duration-700 ease-out transform
-          ${reveal.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-        >
-          <div className="rounded-2xl border border-gray-300/80 p-10 md:p-14 text-center bg-white">
+        <div className="relative max-w-4xl mx-auto">
+          <div
+            ref={reveal.ref}
+            className={`transition-all duration-700 ease-out transform
+            ${reveal.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
+            <div className="rounded-2xl border border-gray-300/80 p-10 md:p-14 text-center bg-white">
 
-            <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-light tracking-tight leading-tight mb-6">
-              Your time is valuable.
-            </h2>
+              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 mb-6">
+                Your time is valuable.
+              </h2>
 
-            <p className="text-lg text-gray-600 leading-relaxed max-w-xl mx-auto mb-10">
-              Series connects you directly with the right people — saving you time by eliminating noise and guesswork.
-            </p>
+              <p className="text-lg text-gray-600 leading-relaxed max-w-xl mx-auto mb-10">
+                Series connects you directly with the right people.
+              </p>
 
-            <div className="flex gap-4 justify-center">
-              <button className="px-10 py-4 bg-gray-900 text-white text-sm tracking-wider hover:scale-[1.03] transition-all duration-300 ease-out">
-                SIGN IN
-              </button>
-              <button className="px-10 py-4 bg-white text-gray-900 text-sm tracking-wider border border-gray-300 hover:bg-gray-50 transition-all duration-300 ease-out">
-                SIGN UP
-              </button>
+              <div className="flex gap-4 justify-center">
+                <button className="px-10 py-4 bg-gray-900 text-white text-sm tracking-wider hover:scale-[1.03] transition-all duration-300 ease-out">
+                  SIGN IN
+                </button>
+                <button className="px-10 py-4 bg-white text-gray-900 text-sm tracking-wider border border-gray-300 hover:bg-gray-50 transition-all duration-300 ease-out">
+                  SIGN UP
+                </button>
+              </div>
+
             </div>
-
           </div>
         </div>
 
