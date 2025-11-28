@@ -76,7 +76,7 @@ function News() {
       <div className="max-w-6xl mx-auto">
 
         <div className="mb-12 text-center">
-          <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 pt-28">
+          <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 pt-20">
             Featured
           </h2>
 

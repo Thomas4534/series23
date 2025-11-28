@@ -3,7 +3,8 @@ import Header from './Header'
 import Footer from './Footer'
 import News from './News'
 import Convo from './Convo'
-import Invitation from './invitation'
+import Timeline from './Timeline'
+
 
 const words = ['founders', 'investors', 'lovers', 'friends']
 
@@ -235,8 +236,10 @@ function App() {
 
         </section>
 
+        <Timeline />
+
         <News />
-        <Invitation />
+
       </main>
 
       <Footer />
