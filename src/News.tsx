@@ -4,7 +4,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 const allHeadlines = [
   {
     id: 1,
-    title: "Yale Juniors Raise $3.1M In 14 Days For Their New AI Social",
+    title: "Yale Juniors Raise $3.1M In 14 Days For Their AI Social Network",
     image: '/images/headline2.jpg',
     publication: 'Forbes',
     date: 'Feb 28, 2024'
@@ -25,7 +25,6 @@ const allHeadlines = [
   }
 ]
 
-// helper to convert publication name to file path
 const getLogoPath = (name: string) =>
   `/images/${name.toLowerCase().replace(/\s+/g, '')}.svg`
 
@@ -43,7 +42,7 @@ function News() {
     setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % allHeadlines.length)
       setIsTransitioning(false)
-    }, 600)
+    }, 400)
   }
 
   const goToPrev = () => {
@@ -53,7 +52,7 @@ function News() {
     setTimeout(() => {
       setCurrentIndex((prev) => (prev - 1 + allHeadlines.length) % allHeadlines.length)
       setIsTransitioning(false)
-    }, 600)
+    }, 400)
   }
 
   const goToIndex = (index: number) => {
@@ -63,7 +62,7 @@ function News() {
     setTimeout(() => {
       setCurrentIndex(index)
       setIsTransitioning(false)
-    }, 600)
+    }, 400)
   }
 
   useEffect(() => {
@@ -72,123 +71,118 @@ function News() {
   }, [])
 
   return (
-    <section className="py-16 px-6 bg-white font-mono text-gray-900 ">
+    <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
 
-        <div className="mb-12 text-center">
-          <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-gray-900 pt-20">
-            Featured
-          </h2>
-
-          <div className="flex gap-3 mt-8 justify-center items-center">
-            {allHeadlines.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToIndex(index)}
-                className={`relative rounded-full transition-all duration-500 ease-out ${
-                  currentIndex === index
-                    ? 'w-12 h-1.5 bg-gray-800'
-                    : 'w-4 h-1.5 bg-gray-300 hover:bg-gray-400'
-                }`}
-              >
-                {currentIndex === index && (
-                  <div className="absolute inset-0 bg-gray-800 rounded-full animate-pulse" />
-                )}
-              </button>
-            ))}
-          </div>
+        {/* Rounded rectangle indicators */}
+        <div className="flex gap-3 justify-center items-center mb-20">
+          {allHeadlines.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToIndex(index)}
+              className="relative focus:outline-none"
+            >
+              <div className={`transition-all duration-300 ease-out rounded-full ${
+                currentIndex === index
+                  ? 'h-1.5 w-12 bg-gray-800'
+                  : 'h-1.5 w-4 bg-gray-300 hover:bg-gray-400'
+              }`} />
+            </button>
+          ))}
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Navigation Arrows */}
-          <button
-            onClick={goToPrev}
-            disabled={isTransitioning}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-8 z-10 w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-300/80 rounded-xl flex items-center justify-center hover:bg-white hover:border-gray-400 transition-all duration-300 disabled:opacity-50"
-          >
-            <ChevronLeft size={20} className="text-gray-700" />
-          </button>
+        {/* Main Content - Larger */}
+        <div className="relative">
+          {/* Navigation Arrows - Larger */}
+          <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-4 z-10">
+            <button
+              onClick={goToPrev}
+              disabled={isTransitioning}
+              className="w-12 h-12 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              onClick={goToNext}
+              disabled={isTransitioning}
+              className="w-12 h-12 flex items-center justify-center text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-all"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
 
-          <button
-            onClick={goToNext}
-            disabled={isTransitioning}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-8 z-10 w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-300/80 rounded-xl flex items-center justify-center hover:bg-white hover:border-gray-400 transition-all duration-300 disabled:opacity-50"
-          >
-            <ChevronRight size={20} className="text-gray-700" />
-          </button>
-
-          {/* Article Container with smooth slide animation */}
-          <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-300/80">
+          {/* Transition Container */}
+          <div className="overflow-hidden">
             <div
-              className={`transition-all duration-600 ease-out ${
+              className={`transition-all duration-500 ease-out ${
                 isTransitioning
                   ? direction === 'next'
-                    ? 'opacity-0 -translate-x-8'
-                    : 'opacity-0 translate-x-8'
+                    ? 'opacity-0 translate-x-12'
+                    : 'opacity-0 -translate-x-12'
                   : 'opacity-100 translate-x-0'
               }`}
             >
-              <article className="group flex flex-col lg:flex-row min-h-[450px]">
+              <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
 
-                {/* IMAGE */}
-                <div className="lg:w-1/2 relative overflow-hidden bg-gray-100">
-                  <img
-                    src={currentHeadline.image}
-                    alt={currentHeadline.title}
-                    className="w-full h-64 lg:h-full object-cover"
-                  />
-
-                  {/* LOGO BADGE */}
-                  <div className="absolute top-6 left-6">
-                    <div className="px-4 py-3 bg-white/95 backdrop-blur-xl border border-gray-300/80 rounded-xl flex items-center justify-center">
+                {/* Image Section - Larger */}
+                <div className="lg:w-1/2">
+                  <div className="relative aspect-[5/4] lg:aspect-[4/3] overflow-hidden">
+                    <img
+                      src={currentHeadline.image}
+                      alt={currentHeadline.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between mt-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-px bg-gray-300"></div>
+                      <span className="text-base text-gray-500">{currentHeadline.date}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
                       <img
                         src={getLogoPath(currentHeadline.publication)}
                         alt={currentHeadline.publication}
-                        className="h-6 w-auto object-contain"
+                        className="h-6 w-auto opacity-90"
                       />
                     </div>
                   </div>
+                </div>
 
-                  {/* DATE */}
-                  <div className="absolute bottom-6 left-6">
-                    <span className="px-3 py-1.5 bg-black/80 text-white rounded-xl text-sm font-medium font-mono tracking-wide">
-                      {currentHeadline.date}
-                    </span>
+                {/* Text Section - Larger */}
+                <div className="lg:w-1/2">
+                  <div className="space-y-10">
+                    <div>
+                      <h3 className="text-2xl lg:text-3xl font-medium text-black leading-tight tracking-tight mb-6">
+                        {currentHeadline.title}
+                      </h3>
+                      <p className="text-lg text-gray-600 leading-relaxed">
+                        Featured in {currentHeadline.publication} for groundbreaking work in AI and social networking innovation.
+                      </p>
+                    </div>
+
+                    <div className="pt-8 border-t border-gray-200">
+                      <a
+                        href="#"
+                        className="inline-flex items-center gap-3 text-base text-gray-600 hover:text-black transition-colors group"
+                      >
+                        <span>Read story</span>
+                        <ArrowUpRight
+                          size={18}
+                          className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                        />
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                {/* TEXT */}
-                <div className="lg:w-1/2 flex flex-col p-6 lg:p-10">
-                  <div className="flex-1">
-                    <h3 className="text-xl lg:text-2xl font-mono font-medium leading-tight text-gray-800 mb-4 tracking-tight">
-                      {currentHeadline.title}
-                    </h3>
-                    <p className="text-base text-gray-600 leading-relaxed font-mono">
-                      Featured in {currentHeadline.publication} for groundbreaking work in AI and social networking innovation.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-gray-300/80">
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-3 text-base font-medium text-gray-700 hover:text-gray-900 transition-all group/link font-mono tracking-tight"
-                    >
-                      READ FULL STORY
-                      <ArrowUpRight
-                        size={18}
-                        className="transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1"
-                      />
-                    </a>
-                  </div>
-                </div>
-
-              </article>
+              </div>
             </div>
           </div>
 
-          <div className="text-center mt-6">
-            <span className="text-sm font-medium text-gray-600 font-mono tracking-wide">
-              [{currentIndex + 1}/{allHeadlines.length}]
+          {/* Counter - Larger */}
+          <div className="text-center mt-16">
+            <span className="text-sm text-gray-500">
+              {currentIndex + 1} / {allHeadlines.length}
             </span>
           </div>
         </div>

@@ -4,7 +4,7 @@ import Footer from './Footer'
 import News from './News'
 import Convo from './Convo'
 import Timeline from './Timeline'
-
+import Try from './Try'
 
 const words = ['founders', 'investors', 'lovers', 'friends']
 
@@ -64,7 +64,7 @@ function App() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-mono">
 
-      {/* ✅ Series Logo - Top Left */}
+      {/* Series Logo - Top Left */}
       <div className="fixed top-5 left-6 z-50">
         <div className="relative p-2 hover:scale-110 transition-transform duration-200 ease-out">
           <img
@@ -151,20 +151,27 @@ function App() {
             ${feature1.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <div className="flex items-center justify-center">
-              <div className="relative w-full max-w-sm">
+              <div className="relative w-full max-w-sm group">
                 <img
                   src="/images/iphone.jpg"
                   alt="Series app on iPhone"
-                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
                 />
-                <img
-                  src="/images/chat.png"
-                  alt="Chat interface"
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 object-contain"
-                />
+
+                {/* ICON — static (no hover) */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 pointer-events-none">
+                  <img src="/images/chat.png" alt="Chat interface" className="object-contain" />
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </div>
+
             <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 mb-2">
+                <div className="w-8 h-px bg-gray-300"></div>
+                <span className="text-sm text-gray-500 tracking-wider">FEATURE 01</span>
+              </div>
               <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
                 Intelligent Matching
               </h2>
@@ -180,7 +187,11 @@ function App() {
             className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
             ${feature2.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
-            <div className="space-y-6 md:pr-10">
+            <div className="space-y-6 md:pr-10 order-2 md:order-1">
+              <div className="inline-flex items-center gap-3 mb-2">
+                <div className="w-8 h-px bg-gray-300"></div>
+                <span className="text-sm text-gray-500 tracking-wider">FEATURE 02</span>
+              </div>
               <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
                 Activate your Network
               </h2>
@@ -188,18 +199,25 @@ function App() {
                 Series strengthens your reach by activating the most valuable connections in your ecosystem.
               </p>
             </div>
-            <div className="flex items-center justify-center md:justify-end">
-              <div className="relative w-full max-w-sm">
+
+            <div className="flex items-center justify-center md:justify-end order-1 md:order-2">
+              <div className="relative w-full max-w-sm group">
                 <img
                   src="/images/iphone.jpg"
                   alt="Series app on iPhone"
-                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
                 />
-                <img
-                  src="/images/serieslogo.jpeg"
-                  alt="Series Logo"
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 object-contain"
-                />
+
+                {/* ICON — static */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 pointer-events-none">
+                  <img
+                    src="/images/serieslogo.jpeg"
+                    alt="Series Logo"
+                    className="object-contain rounded-full"
+                  />
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </div>
           </div>
@@ -211,20 +229,31 @@ function App() {
             ${feature3.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             <div className="flex items-center justify-center">
-              <div className="relative w-full max-w-sm">
+              <div className="relative w-full max-w-sm group">
                 <img
                   src="/images/iphone.jpg"
                   alt="Time saving"
-                  className="w-full object-contain hover:scale-105 transition-transform duration-500 ease-out"
+                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
                 />
-                <img
-                  src="/images/clock.jpg"
-                  alt="Time visual"
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 object-contain"
-                />
+
+                {/* ICON — static */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 pointer-events-none">
+                  <img
+                    src="/images/clock.jpg"
+                    alt="Time visual"
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
             </div>
+
             <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 mb-2">
+                <div className="w-8 h-px bg-gray-300"></div>
+                <span className="text-sm text-gray-500 tracking-wider">FEATURE 03</span>
+              </div>
               <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
                 Stop Wasting Your Time
               </h2>
@@ -235,10 +264,10 @@ function App() {
           </div>
 
         </section>
-
-        <Timeline />
-
         <News />
+        <Timeline />
+        <Try/>
+
 
       </main>
 
