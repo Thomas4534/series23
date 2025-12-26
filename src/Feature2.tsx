@@ -19,28 +19,28 @@ export default function Feature2() {
 
     setIsAnimating(true);
 
-    // Phase 1: Fade out network icon
+
     setIconAnimationPhase('iconFadeOut');
 
     setTimeout(() => {
       setShowNetworkIcon(false);
       setIconAnimationPhase('idle');
 
-      // Start the network animation
+
       setAnimationPhase('activating');
       setVisibleLocations([]);
       setConnectionLines([]);
 
-      // Phase 1: Show first location
+
       setTimeout(() => {
         setVisibleLocations([1]);
 
-        // Phase 2: Show second location
+
         setTimeout(() => {
           setVisibleLocations([1, 2]);
           setConnectionLines([{from: 1, to: 2}]);
 
-          // Phase 3: Show third location
+
           setTimeout(() => {
             setVisibleLocations([1, 2, 3]);
             setConnectionLines([
@@ -49,22 +49,22 @@ export default function Feature2() {
               {from: 1, to: 3}
             ]);
 
-            // Phase 4: Mark as active (floating)
+ 
             setTimeout(() => {
               setAnimationPhase('active');
 
-              // Phase 5: Smooth exit sequence
+
               setTimeout(() => {
                 setAnimationPhase('fading');
 
-                // Phase 6: Staggered cleanup for smoothness
+  
                 setTimeout(() => {
                   setVisibleLocations([]);
                   setTimeout(() => {
                     setConnectionLines([]);
                     setAnimationPhase('idle');
 
-                    // Phase 7: Fade in network icon
+
                     setTimeout(() => {
                       setIconAnimationPhase('iconFadeIn');
                       setShowNetworkIcon(true);
@@ -81,7 +81,7 @@ export default function Feature2() {
           }, 600);
         }, 600);
       }, 300);
-    }, 500); // Same delay as original: 500ms for icon fade out
+    }, 500); 
   }
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function Feature2() {
       </div>
 
       <div className="order-1 md:order-2">
-        {/* Modern smooth panel - reduced min-height and padding */}
+
         <div className="relative w-full max-w-2xl bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-6 shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-200/50 backdrop-blur-sm min-h-[340px] flex flex-col">
           <div className="relative z-10 h-full w-full">
             <div className="flex justify-between items-center mb-8 animate-fadeInUp">
@@ -122,20 +122,16 @@ export default function Feature2() {
               </div>
             </div>
 
-            {/* Network Icon Overlay - Same visual feel as search icon */}
             {(animationPhase === 'idle' && showNetworkIcon) && (
               <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 ${
                 iconAnimationPhase === 'iconFadeOut' ? 'opacity-0 scale-90' :
                 iconAnimationPhase === 'iconFadeIn' ? 'animate-iconFadeIn' : 'opacity-100'
               }`} style={{ zIndex: 20 }}>
                 <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-                  {/* Network icon - same size and color as search icon */}
                   <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {/* Three connected dots forming a network */}
                     <circle cx="7" cy="7" r="2" strokeWidth="1.5" fill="currentColor" />
                     <circle cx="17" cy="7" r="2" strokeWidth="1.5" fill="currentColor" />
                     <circle cx="12" cy="17" r="2" strokeWidth="1.5" fill="currentColor" />
-                    {/* Connection lines between dots */}
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
                       d="M7 7L12 17M17 7L12 17M7 7L17 7" />
                   </svg>
@@ -144,9 +140,7 @@ export default function Feature2() {
               </div>
             )}
 
-            {/* Map Area - reduced bottom margin */}
             <div className="relative w-full h-56 mb-2">
-              {/* Connection lines */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none">
                 {connectionLines.map((line, index) => {
                   const fromLoc = locations.find(l => l.id === line.from);
@@ -172,7 +166,6 @@ export default function Feature2() {
                   );
                 })}
 
-                {/* Gradient definition for connection lines */}
                 <defs>
                   <linearGradient id="connection-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.6" />
@@ -182,7 +175,7 @@ export default function Feature2() {
                 </defs>
               </svg>
 
-              {/* Location dots - Professional version */}
+
               {locations.map((location) => (
                 <div
                   key={location.id}
@@ -197,23 +190,18 @@ export default function Feature2() {
                   }}
                 >
                   <div className={`relative ${animationPhase === 'active' ? 'animate-float-subtle' : ''}`}>
-                    {/* Outer glow/pulse effect */}
                     <div className={`absolute inset-0 w-12 h-12 -m-3 rounded-full transition-all duration-700 ${
                       animationPhase === 'active'
                         ? 'bg-gradient-to-r from-blue-500/20 to-indigo-500/20 animate-pulse-subtle'
                         : 'opacity-0'
                     }`}></div>
 
-                    {/* Main dot */}
                     <div className="relative w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full shadow-lg
                                   flex items-center justify-center ring-2 ring-white/50">
-                      {/* Inner highlight */}
                       <div className="absolute top-1 left-1 w-2 h-2 bg-white/40 rounded-full"></div>
 
-                      {/* Center dot - subtle */}
                       <div className="w-2 h-2 bg-white/90 rounded-full"></div>
 
-                      {/* Optional: City initial as text alternative */}
                       <span className="absolute text-xs font-bold text-white opacity-90">
                         {location.city.charAt(0)}
                       </span>
@@ -222,7 +210,6 @@ export default function Feature2() {
                 </div>
               ))}
 
-              {/* Location messages */}
               {locations.map((location) => (
                 <div
                   key={`msg-${location.id}`}
