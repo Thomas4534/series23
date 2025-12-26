@@ -1,49 +1,48 @@
 import { useEffect, useRef, useState } from 'react'
-import Header from './Header'
 import Footer from './Footer'
 import News from './News'
-import Convo from './Convo'
 import Timeline from './Timeline'
 import Try from './Try'
+import Features from './Features'
 
-const words = ['founders', 'investors', 'lovers', 'friends']
-
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisible(entry.isIntersecting)
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '-50px 0px -50px 0px'
-      }
-    )
-
-    if (ref.current) observer.observe(ref.current)
-
-    return () => {
-      if (ref.current) observer.unobserve(ref.current)
-    }
-  }, [])
-
-  return { ref, visible }
-}
+// Updated words array to include dates, people, and relationship types
+const words = ['founders', 'investors', 'a date', 'friends', 'cofounders', 'mentors', 'clients', 'partners']
 
 function App() {
   const [currentWord, setCurrentWord] = useState(words[0])
+  const [nextWord, setNextWord] = useState(words[1])
+  const [isAnimating, setIsAnimating] = useState(false)
   const [width, setWidth] = useState<number | null>(null)
   const measureRef = useRef<HTMLSpanElement>(null)
+  const wordIndexRef = useRef(0)
 
+  // Animation interval for word cycling
   useEffect(() => {
-    let index = 0
     const interval = setInterval(() => {
-      index = (index + 1) % words.length
-      setCurrentWord(words[index])
-    }, 2000)
+      setIsAnimating(true)
+
+      // Start fade out current word
+      setTimeout(() => {
+        // Update to next word
+        wordIndexRef.current = (wordIndexRef.current + 1) % words.length
+        setCurrentWord(words[wordIndexRef.current])
+
+        // Set the word after next for smooth preparation
+        const nextIndex = (wordIndexRef.current + 1) % words.length
+        setNextWord(words[nextIndex])
+
+        // Reset width measurement
+        if (measureRef.current) {
+          setWidth(measureRef.current.offsetWidth)
+        }
+
+        // Complete animation
+        setTimeout(() => {
+          setIsAnimating(false)
+        }, 200)
+      }, 400)
+    }, 3000) // Change word every 3 seconds
+
     return () => clearInterval(interval)
   }, [])
 
@@ -57,12 +56,16 @@ function App() {
     window.open('https://tv.series.so/', '_blank')
   }
 
-  const feature1 = useScrollReveal()
-  const feature2 = useScrollReveal()
-  const feature3 = useScrollReveal()
+  const handleTryItOutClick = () => {
+    console.log('Try it out clicked')
+  }
+
+  const handleMakeAccountClick = () => {
+    console.log('Make account clicked')
+  }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-mono">
+    <div className="min-h-screen bg-white text-gray-900 font-poppins">
 
       {/* Series Logo - Top Left */}
       <div className="fixed top-5 left-6 z-50">
@@ -90,10 +93,6 @@ function App() {
         </button>
       </div>
 
-      <div className="sticky top-0 z-40 bg-white">
-        <Header />
-      </div>
-
       <main className="pt-20 pb-40">
 
         {/* Featured In */}
@@ -117,157 +116,119 @@ function App() {
           </div>
         </section>
 
-        <Convo />
+        {/* Floating Autoplay Video - FIXED FOR BORDER ISSUE */}
+        <section className="w-full flex justify-center -mt-1">
+          <div className="w-full max-w-4xl px-6">
+            <div className="relative overflow-hidden bg-white">
+              {/* Main video container with negative margins to prevent edge artifacts */}
+              <div className="relative overflow-hidden -mx-[2px] -my-[2px]">
+                <video
+                  src="/videos/NewLandingPageAssets.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  className="w-full h-auto block"
+                  style={{
+                    display: 'block',
+                    lineHeight: 0,
+                    // Ensure no sub-pixel edges
+                    transform: 'translateZ(0)',
+                    WebkitTransform: 'translateZ(0)',
+                    MozTransform: 'translateZ(0)',
+                    // Force pixel snapping
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    MozBackfaceVisibility: 'hidden',
+                    // Hide any potential edges
+                    outline: 'none',
+                    border: 'none',
+                    boxShadow: 'none',
+                  }}
+                />
+              </div>
 
-        {/* Animated Headline */}
-        <section className="max-w-5xl mx-auto px-6 flex justify-center">
-          <h1 className="text-[32px] sm:text-[38px] md:text-[50px] lg:text-[65px] xl:text-[80px] font-semibold tracking-tight leading-tight whitespace-nowrap pb-40">
-            Connect with{' '}
-            <span
-              className="inline-block relative text-gray-500 align-bottom"
-              style={{
-                width: width ? `${width}px` : 'auto',
-                transition: 'width 0.6s ease'
-              }}
+              {/* Single white overlay on all sides to hide any remaining edges */}
+              <div className="absolute inset-0 border-[2px] border-white pointer-events-none z-10"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* Animated Headline with CTA Buttons */}
+        <section className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col items-center justify-center">
+            {/* Headline */}
+            <h1 className="text-[24px] sm:text-[32px] md:text-[40px] lg:text-[55px] xl:text-[80px] font-semibold tracking-tight leading-tight whitespace-nowrap pb-10 text-gray-700 pt-24">
+              Smarter way to connect with{' '}
+              <span
+                className="inline-block relative mx-3"
+                style={{
+                  width: width ? `${width}px` : 'auto',
+                  transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+              >
+                {/* Main container with smooth opacity transition */}
+                <span className="relative inline-block">
+                  {/* Current word with fade out */}
+                  <span
+                    className="text-gray-500 inline-block transition-all duration-500 ease-out"
+                    style={{
+                      opacity: isAnimating ? 0 : 1,
+                      transform: isAnimating ? 'translateY(-10px)' : 'translateY(0)',
+                    }}
+                  >
+                    {currentWord}
+                  </span>
+
+                  {/* Next word with fade in */}
+                  <span
+                    className="text-gray-500 absolute top-0 left-0 inline-block transition-all duration-500 ease-out"
+                    style={{
+                      opacity: isAnimating ? 1 : 0,
+                      transform: isAnimating ? 'translateY(0)' : 'translateY(10px)',
+                    }}
+                  >
+                    {nextWord}
+                  </span>
+                </span>
+
+                {/* Invisible span for width measurement */}
+                <span ref={measureRef} className="invisible absolute whitespace-nowrap">
+                  {currentWord}
+                </span>
+              </span>
+            </h1>
+
+            {/* Try it out Button */}
+            <button
+              onClick={handleTryItOutClick}
+              className="px-10 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800 transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 shadow-lg mb-4"
             >
-              <span className="absolute inset-0 flex justify-center transition-opacity duration-300 ease-in-out">
-                {currentWord}
+              Try it out
+            </button>
+
+            {/* Account Text */}
+            <div className="text-center">
+              <span className="text-gray-400 text-sm">
+                Don't have an account yet?{' '}
+                <button
+                  onClick={handleMakeAccountClick}
+                  className="text-gray-600 hover:text-black font-medium underline transition-colors duration-200"
+                >
+                  Make one now
+                </button>
               </span>
-              <span ref={measureRef} className="invisible whitespace-nowrap">
-                {currentWord}
-              </span>
-            </span>{' '}
-            instantly.
-          </h1>
+            </div>
+          </div>
         </section>
 
-        {/* Features Section */}
-        <section className="max-w-6xl mx-auto px-6 space-y-24">
+        {/* Features Section - Imported from Features.tsx */}
+        <Features />
 
-          {/* Feature 1 */}
-          <div
-            ref={feature1.ref}
-            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
-            ${feature1.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          >
-            <div className="flex items-center justify-center">
-              <div className="relative w-full max-w-sm group">
-                <img
-                  src="/images/iphone.jpg"
-                  alt="Series app on iPhone"
-                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
-                />
-
-                {/* ICON — static (no hover) */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 pointer-events-none">
-                  <img src="/images/chat.png" alt="Chat interface" className="object-contain" />
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 mb-2">
-                <div className="w-8 h-px bg-gray-300"></div>
-                <span className="text-sm text-gray-500 tracking-wider">FEATURE 01</span>
-              </div>
-              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
-                Intelligent Matching
-              </h2>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                Series uses artificial intelligence to connect you with the right person at the right time.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature 2 */}
-          <div
-            ref={feature2.ref}
-            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
-            ${feature2.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          >
-            <div className="space-y-6 md:pr-10 order-2 md:order-1">
-              <div className="inline-flex items-center gap-3 mb-2">
-                <div className="w-8 h-px bg-gray-300"></div>
-                <span className="text-sm text-gray-500 tracking-wider">FEATURE 02</span>
-              </div>
-              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
-                Activate your Network
-              </h2>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                Series strengthens your reach by activating the most valuable connections in your ecosystem.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center md:justify-end order-1 md:order-2">
-              <div className="relative w-full max-w-sm group">
-                <img
-                  src="/images/iphone.jpg"
-                  alt="Series app on iPhone"
-                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
-                />
-
-                {/* ICON — static */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 pointer-events-none">
-                  <img
-                    src="/images/serieslogo.jpeg"
-                    alt="Series Logo"
-                    className="object-contain rounded-full"
-                  />
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              </div>
-            </div>
-          </div>
-
-          {/* Feature 3 */}
-          <div
-            ref={feature3.ref}
-            className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out transform
-            ${feature3.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-          >
-            <div className="flex items-center justify-center">
-              <div className="relative w-full max-w-sm group">
-                <img
-                  src="/images/iphone.jpg"
-                  alt="Time saving"
-                  className="w-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-1"
-                />
-
-                {/* ICON — static */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/5 pointer-events-none">
-                  <img
-                    src="/images/clock.jpg"
-                    alt="Time visual"
-                    className="object-contain rounded-lg"
-                  />
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-100/20 to-gray-200/10 rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 mb-2">
-                <div className="w-8 h-px bg-gray-300"></div>
-                <span className="text-sm text-gray-500 tracking-wider">FEATURE 03</span>
-              </div>
-              <h2 className="text-[32px] sm:text-[38px] md:text-[50px] font-semibold tracking-tight leading-tight text-black">
-                Stop Wasting Your Time
-              </h2>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                Series saves you time by connecting you directly with the right person at the right time.
-              </p>
-            </div>
-          </div>
-
-        </section>
-        <News />
-        <Timeline />
-        <Try/>
-
+        <div className="mt-24">
+        <Try />
+        </div>
 
       </main>
 

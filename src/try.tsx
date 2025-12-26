@@ -1,9 +1,205 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { ArrowRight, CheckCircle } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowRight, CheckCircle, User, Users, Clock, MessageCircle, TrendingUp, Check } from "lucide-react"
 
 export default function AuthSection() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [counter, setCounter] = useState(0)
+  const [hasStarted, setHasStarted] = useState(false)
+  const [visibleMessages, setVisibleMessages] = useState<number[]>([])
+  const isInView = useRef(false)
+  const animationRef = useRef<HTMLDivElement>(null)
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // Custom text messages configuration - dispersed across entire width
+  const messages = [
+    // Far left side - close to edge
+    {
+      id: 1,
+      type: 'sent', // blue/iMessage style
+      size: 'medium',
+      horizontalOffset: '-250px', // Far left
+      verticalOffset: '-100px',
+      rotation: -3,
+      delay: 0.2,
+      width: 'w-48',
+      content: 'Just joined Series - finding connections instantly',
+      time: '2 min ago'
+    },
+    {
+      id: 2,
+      type: 'received', // grey/other person
+      size: 'large',
+      horizontalOffset: '-420px', // Left middle
+      verticalOffset: '-130px',
+      rotation: -3,
+      delay: 0.4,
+      width: 'w-56',
+      content: 'Found 3 perfect matches in my network already',
+      time: '5 min ago'
+    },
+    {
+      id: 3,
+      type: 'sent', // blue/iMessage style
+      size: 'small',
+      horizontalOffset: '-350px', // Near center left
+      verticalOffset: '20px',
+      rotation: 2,
+      delay: 0.6,
+      width: 'w-44',
+      content: 'No more endless searching',
+      time: '10 min ago'
+    },
+
+    // Right side - symmetric dispersion
+    {
+      id: 4,
+      type: 'received', // grey/other person
+      size: 'medium',
+      horizontalOffset: '150px', // Near center right
+      verticalOffset: '-100px',
+      rotation: 3,
+      delay: 0.8,
+      width: 'w-48',
+      content: 'Connected with a senior developer instantly',
+      time: '15 min ago'
+    },
+    {
+      id: 5,
+      type: 'sent', // blue/iMessage style
+      size: 'small',
+      horizontalOffset: '250px', // Right middle
+      verticalOffset: '30px',
+      rotation: 1,
+      delay: 1.0,
+      width: 'w-44',
+      content: 'Saving hours every week',
+      time: '20 min ago'
+    },
+    {
+      id: 6,
+      type: 'received', // grey/other person
+      size: 'large',
+      horizontalOffset: '330px', // Far right
+      verticalOffset: '-110px',
+      rotation: 3,
+      delay: 1.2,
+      width: 'w-56',
+      content: 'Everyone on Series is so responsive',
+      time: '25 min ago'
+    },
+  ]
+
+  // Set up intersection observer
+  useEffect(() => {
+    if (!animationRef.current) return
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Component is in view
+            isInView.current = true
+
+            // Reset and start animations
+            setHasStarted(true)
+            setVisibleMessages([])
+
+            // Reset counter animation
+            setCounter(0)
+
+            // Animate messages in sequence
+            messages.forEach((msg) => {
+              setTimeout(() => {
+                setVisibleMessages(prev => [...prev, msg.id])
+              }, msg.delay * 1000)
+            })
+
+            // Start counter animation
+            const increment = Math.ceil(500000 / 100)
+            const interval = setInterval(() => {
+              setCounter(prev => {
+                const next = prev + increment
+                if (next >= 500000) {
+                  clearInterval(interval)
+                  return 500000
+                }
+                return next
+              })
+            }, 30)
+
+            // Store interval ID for cleanup
+            const intervalId = interval
+
+            // Cleanup when component goes out of view
+            return () => clearInterval(intervalId)
+          } else {
+            // Component is out of view
+            isInView.current = false
+            setHasStarted(false)
+          }
+        })
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of the element is visible
+        rootMargin: '0px'
+      }
+    )
+
+    observerRef.current.observe(animationRef.current)
+
+    return () => {
+      if (observerRef.current && animationRef.current) {
+        observerRef.current.unobserve(animationRef.current)
+      }
+    }
+  }, [])
+
+  // Handle counter animation when hasStarted changes
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | null = null
+
+    if (hasStarted && counter < 500000 && isInView.current) {
+      const increment = Math.ceil(500000 / 100)
+      intervalId = setInterval(() => {
+        setCounter(prev => {
+          const next = prev + increment
+          if (next >= 500000) {
+            clearInterval(intervalId!)
+            return 500000
+          }
+          return next
+        })
+      }, 30)
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
+  }, [hasStarted, counter])
+
+  // Handle message animations when hasStarted changes
+  useEffect(() => {
+    let timers: NodeJS.Timeout[] = []
+
+    if (hasStarted) {
+      // Clear any existing messages
+      setVisibleMessages([])
+
+      // Stagger the appearance of all 6 messages
+      timers = messages.map((msg) =>
+        setTimeout(() => {
+          setVisibleMessages(prev => [...prev, msg.id])
+        }, msg.delay * 1000)
+      )
+    }
+
+    return () => {
+      timers.forEach(timer => clearTimeout(timer))
+    }
+  }, [hasStarted])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -12,72 +208,268 @@ export default function AuthSection() {
   }
 
   return (
-    <section className="w-full py-10 bg-white">
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="max-w-md mx-auto text-center px-6"
-      >
+    <section ref={animationRef} className="w-full py-20 bg-white relative overflow-hidden">
+      {/* Background gradient overlay to match message backgrounds */}
+      <div className="absolute inset-0 bg-white pointer-events-none" />
 
-        {/* Success */}
-        {isSubmitted ? (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-5"
-          >
-            <CheckCircle className="w-12 h-12 text-black" />
-            <p className="text-lg text-black tracking-tight">
-              We’ll text you shortly.
-            </p>
-          </motion.div>
-        ) : (
-          <motion.form
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-10"
-          >
-            <h2 className="text-4xl font-medium text-black tracking-tight">
-              Join Series
-            </h2>
-
-            {/* Clean minimal “slot” input */}
-            <motion.input
-              type="tel"
-              placeholder="Your phone number"
-              required
-              className="
-                w-full
-                bg-white
-                py-4 px-5
-                text-lg
-                rounded-xl
-                border border-neutral-200
-                shadow-[inset_0_0_0_1px_rgba(0,0,0,0.02)]
-                outline-none
-                transition-all duration-300
-                focus:border-black
-                focus:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]
-              "
-              whileFocus={{ scale: 1.01 }}
-            />
-
-            <motion.button
-              type="submit"
-              whileHover={{ opacity: 0.7 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full flex items-center justify-center gap-2 py-3
-                         text-black font-medium transition-opacity"
+      <div className="relative max-w-7xl mx-auto px-4">
+        {/* Messages container - positioned across entire width */}
+        <div className="absolute inset-0 hidden lg:block">
+          {messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={false} // Don't use initial animation
+              animate={{
+                opacity: visibleMessages.includes(msg.id) ? 1 : 0,
+                x: visibleMessages.includes(msg.id) ? msg.horizontalOffset :
+                    msg.horizontalOffset.startsWith('-') ? `calc(${msg.horizontalOffset} - 80px)` : `calc(${msg.horizontalOffset} + 80px)`,
+                y: visibleMessages.includes(msg.id) ? msg.verticalOffset :
+                    `calc(${msg.verticalOffset} ${msg.horizontalOffset.startsWith('-') ? '-' : '+'} 40px)`,
+                rotate: visibleMessages.includes(msg.id) ? msg.rotation : msg.rotation * 1.5,
+                scale: visibleMessages.includes(msg.id) ? 1 : 0.85
+              }}
+              transition={{
+                duration: 0.8,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
+              className={`absolute ${msg.width}`}
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(-50%, -50%) rotate(${msg.rotation}deg)`,
+                marginLeft: msg.horizontalOffset
+              }}
             >
-              Continue
-              <ArrowRight className="w-4 h-4" />
-            </motion.button>
-          </motion.form>
-        )}
-      </motion.div>
+              {/* Message bubble */}
+              <div className={`relative rounded-2xl p-3.5 shadow-lg backdrop-blur-[2px] border ${
+                msg.type === 'sent'
+                  ? 'bg-gradient-to-br from-blue-50/95 to-blue-100/80 border-blue-200/60'
+                  : 'bg-gradient-to-br from-neutral-50/95 to-neutral-100/80 border-neutral-200/60'
+              }`}>
+                {/* Message content */}
+                <div className="relative z-10">
+                  {/* Message header */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                      msg.type === 'sent' ? 'bg-blue-500' : 'bg-neutral-600'
+                    }`}>
+                      {msg.type === 'sent' ? (
+                        <User className="w-3 h-3 text-white" />
+                      ) : (
+                        <Users className="w-3 h-3 text-white" />
+                      )}
+                    </div>
+                    <span className={`text-xs font-medium ${
+                      msg.type === 'sent' ? 'text-blue-700' : 'text-neutral-700'
+                    }`}>
+                      {msg.type === 'sent' ? 'You' : 'Network'}
+                    </span>
+                    <span className="text-xs text-neutral-400 ml-auto flex items-center gap-1">
+                      <Clock className="w-2.5 h-2.5" />
+                      {msg.time}
+                    </span>
+                  </div>
+
+                  {/* Message text */}
+                  <p className={`text-sm leading-snug mb-1.5 ${
+                    msg.type === 'sent' ? 'text-blue-900' : 'text-neutral-900'
+                  }`}>
+                    {msg.content}
+                  </p>
+
+                  {/* Message footer */}
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center gap-1.5">
+                      {msg.type === 'sent' ? (
+                        <>
+                          <Check className="w-3 h-3 text-blue-500" />
+                          <span className="text-xs text-blue-500">Delivered</span>
+                        </>
+                      ) : (
+                        <>
+                          <MessageCircle className="w-3 h-3 text-neutral-500" />
+                          <span className="text-xs text-neutral-500">Reply</span>
+                        </>
+                      )}
+                    </div>
+                    {msg.id % 2 === 0 && (
+                      <div className="flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3 text-green-500" />
+                        <span className="text-xs text-green-600 font-medium">95% match</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Subtle gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent rounded-2xl pointer-events-none ${
+                  msg.type === 'sent' ? 'mix-blend-overlay' : 'mix-blend-soft-light'
+                }`} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-md mx-auto relative z-10"
+        >
+          <AnimatePresence mode="wait">
+            {isSubmitted ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="flex flex-col items-center justify-center text-center space-y-6"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 15 }}
+                  className="relative"
+                >
+                  <div className="absolute inset-0 bg-black/5 rounded-full blur-md"></div>
+                  <CheckCircle className="w-16 h-16 text-black relative z-10" />
+                </motion.div>
+
+                <div className="space-y-2">
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-2xl font-medium text-black tracking-tight"
+                  >
+                    You're on the list
+                  </motion.p>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-neutral-600 text-sm"
+                  >
+                    We'll text you shortly with next steps.
+                  </motion.p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-10"
+              >
+                {/* Header with subtle icon */}
+                <div className="text-center space-y-4">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-3xl sm:text-4xl font-medium text-black tracking-tight mt-24 whitespace-nowrap"
+                  >
+                    Join{" "}
+                    <span className="text-gray-800">
+                      {counter.toLocaleString()}
+                    </span>
+                    + on Series
+                  </motion.h2>
+
+
+                </div>
+
+                <motion.form
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  {/* Phone Input with enhanced styling */}
+                  <motion.div
+                    className="relative group"
+                    whileFocus={{ scale: 1.01 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+
+                    <input
+                      type="tel"
+                      placeholder="+1 (123) 456-7890"
+                      required
+                      className="
+                        relative
+                        w-full
+                        bg-white
+                        py-4 px-6
+                        text-lg
+                        rounded-xl
+                        border border-neutral-200/80
+                        shadow-[0_1px_3px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.1)]
+                        outline-none
+                        transition-all duration-300
+                        focus:border-black
+                        focus:shadow-[0_0_0_2px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.05)]
+                        placeholder:text-neutral-400
+                        group-focus-within:border-black/30
+                      "
+                    />
+
+                    {/* Subtle focus indicator */}
+                    <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-focus-within:border-black/10 transition-colors duration-300"></div>
+                  </motion.div>
+
+                  {/* Continue Button */}
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="
+                      w-full
+                      px-10
+                      py-4
+                      bg-black
+                      text-white
+                      font-medium
+                      rounded-full
+                      hover:bg-gray-800
+                      transition-all
+                      duration-300
+                      ease-out
+                      transform
+                      hover:scale-105
+                      active:scale-95
+                      shadow-lg
+                      mb-4
+                      flex
+                      items-center
+                      justify-center
+                      gap-2
+                    "
+                  >
+                    Continue
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+
+                  {/* Privacy notice */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="text-center text-xs text-neutral-400 pt-2"
+                  >
+                    By continuing, you agree to our Terms and Privacy Policy
+                  </motion.p>
+                </motion.form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </section>
   )
 }
