@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 const locations = [
   { id: 1, city: 'San Francisco', x: 10, y: 50, message: 'Looking for React developer!' },
-  { id: 2, city: 'New York', x: 45, y: 30, message: 'I can help! 5+ years experience' },
-  { id: 3, city: 'Houston', x: 79, y: 45, message: 'Need Node.js backend help?' },
+  { id: 2, city: 'New York', x: 45, y: 30, message: 'Anyone hitting the club later?' },
+  { id: 3, city: 'Houston', x: 79, y: 45, message: 'I need a running buddy!' },
 ]
 
 export default function Feature2() {
