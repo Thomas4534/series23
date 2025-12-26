@@ -34,10 +34,8 @@ export default function Features() {
 
   return (
     <section className="max-w-6xl mx-auto px-6 space-y-48 mt-48">
-      {/* Feature 1 - Imported as separate component */}
       <Feature1 />
 
-      {/* Feature 2 - Network Activation */}
       <div
         ref={feature2.ref}
         className={`transition-all duration-700 ease-out ${
@@ -47,7 +45,6 @@ export default function Features() {
         <Feature2 />
       </div>
 
-      {/* Feature 3 - Time Saving */}
       <div
         ref={feature3.ref}
         className={`transition-all duration-700 ease-out ${
