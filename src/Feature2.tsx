@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 const locations = [
   { id: 1, city: 'San Francisco', x: 10, y: 50, message: 'Looking for React developer!' },
-  { id: 2, city: 'New York', x: 45, y: 30, message: 'Anyone hitting the club later?' },
-  { id: 3, city: 'Houston', x: 79, y: 45, message: 'I need a running buddy!' },
+  { id: 2, city: 'New York', x: 45, y: 70, message: 'Anyone hitting the club later?' },
+  { id: 3, city: 'Houston', x: 80, y: 50, message: 'I need a running buddy!' },
 ]
 
 export default function Feature2() {
@@ -157,12 +157,12 @@ export default function Feature2() {
                     <path
                       key={`line-${index}`}
                       d={`M ${fromLoc.x}% ${fromLoc.y}% L ${toLoc.x}% ${toLoc.y}%`}
-                      stroke="#6366f1"
-                      strokeWidth="2"
+                      stroke="url(#connection-gradient)"
+                      strokeWidth="1.5"
                       fill="none"
                       strokeDasharray="200"
                       className={`transition-all duration-[1200ms] ease-in-out ${
-                        animationPhase === 'fading' ? 'opacity-0 stroke-dashoffset-[200]' : 'opacity-40 stroke-dashoffset-0'
+                        animationPhase === 'fading' ? 'opacity-0 stroke-dashoffset-[200]' : 'opacity-100 stroke-dashoffset-0'
                       }`}
                       style={{
                         strokeDashoffset: animationPhase === 'active' || animationPhase === 'activating' ? 0 : 200,
@@ -171,26 +171,52 @@ export default function Feature2() {
                     />
                   );
                 })}
+
+                {/* Gradient definition for connection lines */}
+                <defs>
+                  <linearGradient id="connection-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.6" />
+                    <stop offset="50%" stopColor="#6366f1" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.6" />
+                  </linearGradient>
+                </defs>
               </svg>
 
-              {/* Location dots */}
+              {/* Location dots - Professional version */}
               {locations.map((location) => (
                 <div
                   key={location.id}
                   className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) ${
                     visibleLocations.includes(location.id) && animationPhase !== 'fading'
                       ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-0 blur-sm'
+                      : 'opacity-0 scale-0'
                   }`}
                   style={{
                     left: `${location.x}%`,
                     top: `${location.y}%`,
                   }}
                 >
-                  <div className={`relative ${animationPhase === 'active' ? 'animate-float-gentle' : ''}`}>
-                    <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full shadow-lg
-                                  flex items-center justify-center ring-2 ring-white">
-                      <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+                  <div className={`relative ${animationPhase === 'active' ? 'animate-float-subtle' : ''}`}>
+                    {/* Outer glow/pulse effect */}
+                    <div className={`absolute inset-0 w-12 h-12 -m-3 rounded-full transition-all duration-700 ${
+                      animationPhase === 'active'
+                        ? 'bg-gradient-to-r from-blue-500/20 to-indigo-500/20 animate-pulse-subtle'
+                        : 'opacity-0'
+                    }`}></div>
+
+                    {/* Main dot */}
+                    <div className="relative w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full shadow-lg
+                                  flex items-center justify-center ring-2 ring-white/50">
+                      {/* Inner highlight */}
+                      <div className="absolute top-1 left-1 w-2 h-2 bg-white/40 rounded-full"></div>
+
+                      {/* Center dot - subtle */}
+                      <div className="w-2 h-2 bg-white/90 rounded-full"></div>
+
+                      {/* Optional: City initial as text alternative */}
+                      <span className="absolute text-xs font-bold text-white opacity-90">
+                        {location.city.charAt(0)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -230,7 +256,9 @@ export default function Feature2() {
         @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes floatGentle { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+        @keyframes floatSubtle { 0%, 100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-4px) scale(1.02); } }
         @keyframes pulseGentle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.04); opacity: 0.9; } }
+        @keyframes pulseSubtle { 0%, 100% { transform: scale(1); opacity: 0.2; } 50% { transform: scale(1.1); opacity: 0.1; } }
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 70% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
         @keyframes bulletIn { from { transform: scale(0); } to { transform: scale(1); } }
         @keyframes iconFadeIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
@@ -238,7 +266,9 @@ export default function Feature2() {
         .animate-fadeInLeft { animation: fadeInLeft 0.8s ease-out forwards; }
         .animate-fadeInUp { animation: fadeInUp 0.8s ease-out forwards; }
         .animate-float-gentle { animation: floatGentle 3s ease-in-out infinite; }
+        .animate-float-subtle { animation: floatSubtle 3.5s ease-in-out infinite; }
         .animate-pulse-gentle { animation: pulseGentle 2s ease-in-out infinite; }
+        .animate-pulse-subtle { animation: pulseSubtle 3s ease-in-out infinite; }
         .animate-pop { animation: pop 0.4s ease-out forwards; }
         .animate-bulletIn { animation: bulletIn 0.5s ease-out forwards; }
         .animate-iconFadeIn { animation: iconFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
