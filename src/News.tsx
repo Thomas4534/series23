@@ -74,7 +74,6 @@ function News() {
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
 
-        {/* Rounded rectangle indicators */}
         <div className="flex gap-3 justify-center items-center mb-20">
           {allHeadlines.map((_, index) => (
             <button
@@ -91,9 +90,8 @@ function News() {
           ))}
         </div>
 
-        {/* Main Content - Larger */}
+
         <div className="relative">
-          {/* Navigation Arrows - Larger */}
           <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-4 z-10">
             <button
               onClick={goToPrev}
@@ -111,7 +109,6 @@ function News() {
             </button>
           </div>
 
-          {/* Transition Container */}
           <div className="overflow-hidden">
             <div
               className={`transition-all duration-500 ease-out ${
@@ -124,7 +121,6 @@ function News() {
             >
               <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
 
-                {/* Image Section - Larger */}
                 <div className="lg:w-1/2">
                   <div className="relative aspect-[5/4] lg:aspect-[4/3] overflow-hidden">
                     <img
@@ -148,7 +144,6 @@ function News() {
                   </div>
                 </div>
 
-                {/* Text Section - Larger */}
                 <div className="lg:w-1/2">
                   <div className="space-y-10">
                     <div>
@@ -179,7 +174,6 @@ function News() {
             </div>
           </div>
 
-          {/* Counter - Larger */}
           <div className="text-center mt-16">
             <span className="text-sm text-gray-500">
               {currentIndex + 1} / {allHeadlines.length}
