@@ -45,7 +45,6 @@ export default function CompactTimeline() {
     <section className="relative w-full py-20 bg-white">
       <div className="max-w-4xl mx-auto px-6">
 
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-4">
             Series
@@ -53,13 +52,12 @@ export default function CompactTimeline() {
           <div className="w-20 h-px bg-gray-300 mx-auto" />
         </div>
 
-        {/* Timeline Container */}
+ 
         <div className="relative">
 
-          {/* Vertical Line */}
           <div className="absolute left-1/2 -translate-x-1/2 h-full w-px bg-gradient-to-b from-gray-300 via-gray-400 to-gray-300" />
 
-          {/* Timeline Items */}
+
           <div className="space-y-6">
             {timeline.map((item, index) => {
               const reveal = useScrollReveal()
@@ -75,12 +73,11 @@ export default function CompactTimeline() {
                   className={`relative flex ${isLeft ? 'justify-start' : 'justify-end'}`}
                 >
 
-                  {/* Node */}
+
                   <div className="absolute left-1/2 -translate-x-1/2 top-6 z-20">
                     <div className="w-3 h-3 rounded-full bg-white border-2 border-gray-900" />
                   </div>
 
-                  {/* Card */}
                   <div className={`w-full md:w-[46%] px-4 ${isLeft ? 'pr-12' : 'pl-12'}`}>
 
                     <motion.div
@@ -96,7 +93,7 @@ export default function CompactTimeline() {
                         duration-300
                       "
                     >
-                      {/* Year */}
+
                       <div className="flex items-center gap-3 mb-4">
                         <span className="text-lg font-medium text-gray-900">
                           {item.year}
@@ -104,12 +101,11 @@ export default function CompactTimeline() {
                         <div className="w-8 h-px bg-gray-300"></div>
                       </div>
 
-                      {/* Title - Darker Font */}
+
                       <h3 className="text-xl font-semibold text-gray-900 mb-3">
                         {item.title}
                       </h3>
 
-                      {/* Description - Darker Font */}
                       <p className="text-gray-800 leading-relaxed">
                         {item.description}
                       </p>
