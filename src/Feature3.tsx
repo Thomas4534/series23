@@ -8,7 +8,7 @@ export default function Feature3() {
   const [showSearchIcon, setShowSearchIcon] = useState(true)
   const [animationPhase, setAnimationPhase] = useState<'idle' | 'searchIconFadeOut' | 'messageSlideIn' | 'searchingAppear' | 'connectionsAppear' | 'connectionsDisappear' | 'searchIconFadeIn'>('idle')
 
-  // Start time saving search animation
+
   const startTimeSavingSearch = () => {
     setAnimationPhase('searchIconFadeOut')
 
@@ -26,7 +26,7 @@ export default function Feature3() {
             setTimeout(() => {
               setTimeSavingState('found')
               setAnimationPhase('connectionsAppear')
-              // Staggered appearance of connections with slightly longer gaps for smoothness
+
               setTimeout(() => setFoundConnections([1]), 100)
               setTimeout(() => setFoundConnections([1, 2]), 250)
               setTimeout(() => setFoundConnections([1, 2, 3]), 400)
@@ -147,7 +147,6 @@ export default function Feature3() {
                       }`}
                       style={{
                         transitionDelay: `${id * 50}ms`,
-                        // Use a specific bounce class only when they first appear
                         animation: foundConnections.includes(id) && animationPhase === 'connectionsAppear'
                           ? 'connectionBounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                           : 'none'
