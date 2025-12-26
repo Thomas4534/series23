@@ -113,9 +113,6 @@ export default function Feature1() {
                 <div className="bg-white rounded-xl p-3 border border-gray-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
                   <div className="relative aspect-square mb-2 overflow-hidden rounded-lg bg-gray-100">
                     <img src="/images/profile1.jpg" alt="You" className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 w-5 h-5 bg-gray-800 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-[10px] font-semibold text-white">1</span>
-                    </div>
                   </div>
                   <div className="text-center">
                     <h4 className="text-xs font-medium text-gray-800">Brian</h4>
@@ -143,11 +140,6 @@ export default function Feature1() {
                     <div className="bg-white rounded-xl p-3 border border-gray-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-700">
                       <div className="relative aspect-square mb-2 overflow-hidden rounded-lg bg-gray-100">
                         <img src={`/images/profile${id}.jpg`} alt={`Profile ${id}`} className="w-full h-full object-cover" />
-                        <div className={`absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center transition-all duration-500 ${
-                          isSelected ? 'bg-blue-600 scale-110 shadow-md' : 'bg-gray-400'
-                        }`}>
-                          <span className="text-[10px] font-semibold text-white">{id}</span>
-                        </div>
                       </div>
                       <div className="text-center">
                         <h4 className="text-xs font-medium text-gray-800 truncate">{profiles[id-1].name}</h4>
@@ -172,7 +164,7 @@ export default function Feature1() {
                     <div className="text-xl font-bold text-gray-800 tracking-tight">
                       {matchResult?.compatibility}%
                     </div>
-                    <p className="text-[10px] font-medium text-gray-500 mt-1 uppercase tracking-wider">
+                    <p className="text-[10px] font-medium text-gray-500 mt-1 tracking-wider">
                       Match Score
                     </p>
                   </div>
@@ -185,32 +177,13 @@ export default function Feature1() {
 
       <div className="space-y-6">
         <div className="space-y-3">
-          <h2 className="text-5xl font-medium text-gray-800 animate-fadeInLeft">
+          <h2 className="text-5xl font-medium text-gray-800 animate-fadeInLeft pb-4">
             Intelligent Matching
           </h2>
-          <p className="text-gray-600 leading-relaxed text-sm md:text-base max-w-md animate-fadeInLeft delay-100">
+          <p className="text-gray-400 leading-relaxed text-sm md:text-base max-w-md animate-fadeInLeft delay-100">
             Discover meaningful connections through our sophisticated compatibility algorithms.
           </p>
         </div>
-
-        <ul className="space-y-4">
-          {[
-            { title: "Advanced Compatibility"},
-            { title: "Smart Algorithms"},
-            { title: "Personalized Insights"}
-          ].map((feature, index) => (
-            <li
-              key={index}
-              className="flex items-start text-gray-600 animate-fadeInLeft"
-              style={{ animationDelay: `${200 + index * 100}ms` }}
-            >
-              <div className="w-5 h-5 flex items-center justify-center mr-3 animate-bulletIn">
-                <div className="w-1.5 h-1.5 bg-gray-800 rounded-full animate-pop delay-150"></div>
-              </div>
-              <h4 className="text-sm text-gray-800">{feature.title}</h4>
-            </li>
-          ))}
-        </ul>
       </div>
 
       <style jsx>{`

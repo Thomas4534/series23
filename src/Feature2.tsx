@@ -97,30 +97,13 @@ export default function Feature2() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
       <div className="space-y-4 order-2 md:order-1 animate-fadeInLeft">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-gray-700 animate-fadeInUp">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-gray-700 animate-fadeInUp pb-4">
           Activate your Network
         </h2>
-        <p className="text-gray-600 leading-relaxed animate-fadeInUp delay-100">
-          Connect with people globally through a network.
+        <p className="text-gray-400 leading-relaxed animate-fadeInUp delay-100">
+          Connect with people globally through a network. <br/>
+          Meet people from around the world.
         </p>
-        <ul className="space-y-2">
-          {[
-            "Global network spanning multiple continents",
-            "Real-time connections across time zones",
-            "Cross-cultural matching"
-          ].map((item, index) => (
-            <li
-              key={index}
-              className="flex items-center text-gray-600 animate-fadeInLeft"
-              style={{ animationDelay: `${200 + index * 100}ms` }}
-            >
-              <div className="w-5 h-5 flex items-center justify-center mr-3 animate-bulletIn">
-                <div className="w-1.5 h-1.5 bg-gray-800 rounded-full animate-pop delay-150"></div>
-              </div>
-              {item}
-            </li>
-          ))}
-        </ul>
       </div>
 
       <div className="order-1 md:order-2">

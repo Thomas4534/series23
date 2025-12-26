@@ -219,16 +219,8 @@ export default function Feature3() {
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-gray-700">Save Time</h2>
-        <p className="text-gray-600 leading-relaxed">Get instant access to qualified connections without endless searching.</p>
-        <ul className="space-y-3">
-          {['Instant access to professionals', 'No endless searching', 'Direct connections'].map((text, i) => (
-            <li key={i} className="flex items-center text-gray-600">
-              <div className="w-1.5 h-1.5 bg-gray-800 rounded-full mr-3" />
-              {text}
-            </li>
-          ))}
-        </ul>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium text-gray-700 pb-4">Save Time</h2>
+        <p className="text-gray-600 leading-relaxed">Get access to qualified connections without searching. <br/> Get matched with people that matter. </p>
       </div>
     </div>
   )
