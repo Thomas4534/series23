@@ -4,6 +4,7 @@ import News from './News'
 import Timeline from './Timeline'
 import Try from './Try'
 import Features from './Features'
+import Steps from './Steps'
 
 // Updated words array to include dates, people, and relationship types
 const words = ['founders', 'investors', 'a date', 'friends', 'cofounders', 'mentors', 'clients', 'partners']
@@ -160,7 +161,7 @@ function App() {
           <div className="flex flex-col items-center justify-center">
             {/* Headline */}
             <h1 className="text-[24px] sm:text-[32px] md:text-[40px] lg:text-[55px] xl:text-[80px] font-semibold tracking-tight leading-tight whitespace-nowrap pb-10 text-gray-700 pt-24">
-              Smarter way to connect with{' '}
+              Smarter way to connect meet{' '}
               <span
                 className="inline-block relative mx-3"
                 style={{
@@ -226,9 +227,20 @@ function App() {
         {/* Features Section - Imported from Features.tsx */}
         <Features />
 
+
+
+
+
+        <Steps />
+
+
+
         <div className="mt-24">
         <Try />
         </div>
+
+
+
 
       </main>
 

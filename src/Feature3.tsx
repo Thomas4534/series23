@@ -80,7 +80,7 @@ export default function Feature3() {
   }, [])
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-32 items-center">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-32 items-center pb-48">
       <div>
         <div className="relative w-full max-w-2xl bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-200/50 backdrop-blur-sm h-[480px]">
           <div className="absolute inset-0 overflow-hidden rounded-3xl">

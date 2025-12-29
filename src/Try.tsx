@@ -24,7 +24,7 @@ export default function AuthSection() {
       delay: 0.2,
       width: 'w-48',
       content: 'Just joined Series - finding connections instantly',
-      time: '2 min ago'
+      time: '2 min'
     },
     {
       id: 2,
@@ -36,7 +36,7 @@ export default function AuthSection() {
       delay: 0.4,
       width: 'w-56',
       content: 'Found 3 perfect matches in my network already',
-      time: '5 min ago'
+      time: '5 min'
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ export default function AuthSection() {
       delay: 0.6,
       width: 'w-44',
       content: 'No more endless searching',
-      time: '10 min ago'
+      time: '10 min'
     },
 
     // Right side - symmetric dispersion
@@ -61,8 +61,8 @@ export default function AuthSection() {
       rotation: 3,
       delay: 0.8,
       width: 'w-48',
-      content: 'Connected with a senior developer instantly',
-      time: '15 min ago'
+      content: 'Going on a hike with a new friend !',
+      time: '15 min'
     },
     {
       id: 5,
@@ -74,7 +74,7 @@ export default function AuthSection() {
       delay: 1.0,
       width: 'w-44',
       content: 'Saving hours every week',
-      time: '20 min ago'
+      time: '20 min'
     },
     {
       id: 6,
@@ -86,7 +86,7 @@ export default function AuthSection() {
       delay: 1.2,
       width: 'w-56',
       content: 'Everyone on Series is so responsive',
-      time: '25 min ago'
+      time: '25 min'
     },
   ]
 
@@ -292,12 +292,7 @@ export default function AuthSection() {
                         </>
                       )}
                     </div>
-                    {msg.id % 2 === 0 && (
-                      <div className="flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                        <span className="text-xs text-green-600 font-medium">95% match</span>
-                      </div>
-                    )}
+
                   </div>
                 </div>
 
