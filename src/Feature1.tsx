@@ -106,7 +106,6 @@ export default function Feature1() {
             </div>
 
             <div className="grid grid-cols-4 gap-6 relative h-[160px] items-center">
-              {/* Profile 1 (You) */}
               <div className={`relative transition-all duration-[800ms] cubic-bezier(0.34, 1.56, 0.64, 1) ${
                 matchingState === 'matched' ? 'z-10 scale-105' : ''
               }`}>
@@ -121,7 +120,6 @@ export default function Feature1() {
                 </div>
               </div>
 
-              {/* Profiles 2, 3, 4 */}
               {[2, 3, 4].map((id) => {
                 const isSelected = selectedProfile === id;
                 const isMatching = matchingState === 'matching';
@@ -150,7 +148,6 @@ export default function Feature1() {
                 );
               })}
 
-              {/* Compatibility Popup */}
               <div className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-48 z-40 transition-all duration-700 cubic-bezier(0.175, 0.885, 0.32, 1.275) ${
                 showMatchPopup ? 'opacity-100 scale-100' : 'opacity-0 scale-50 pointer-events-none blur-sm'
               }`}>

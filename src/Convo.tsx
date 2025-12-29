@@ -5,7 +5,7 @@ function Convo() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(-1);
   const [visibleMessages, setVisibleMessages] = useState([]);
   const [mountedKeys, setMountedKeys] = useState(new Set());
-  const [isExiting, setIsExiting] = useState(false); // ✅ global exit state
+  const [isExiting, setIsExiting] = useState(false); 
 
   const messageSets = [
     [

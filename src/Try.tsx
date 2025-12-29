@@ -11,14 +11,14 @@ export default function AuthSection() {
   const animationRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
-  // Custom text messages configuration - dispersed across entire width
+
   const messages = [
-    // Far left side - close to edge
+
     {
       id: 1,
-      type: 'sent', // blue/iMessage style
+      type: 'sent', 
       size: 'medium',
-      horizontalOffset: '-250px', // Far left
+      horizontalOffset: '-250px', 
       verticalOffset: '-100px',
       rotation: -3,
       delay: 0.2,
@@ -28,9 +28,9 @@ export default function AuthSection() {
     },
     {
       id: 2,
-      type: 'received', // grey/other person
+      type: 'received', 
       size: 'large',
-      horizontalOffset: '-420px', // Left middle
+      horizontalOffset: '-420px', 
       verticalOffset: '-130px',
       rotation: -3,
       delay: 0.4,
@@ -40,9 +40,9 @@ export default function AuthSection() {
     },
     {
       id: 3,
-      type: 'sent', // blue/iMessage style
+      type: 'sent', 
       size: 'small',
-      horizontalOffset: '-350px', // Near center left
+      horizontalOffset: '-350px', 
       verticalOffset: '20px',
       rotation: 2,
       delay: 0.6,
@@ -51,12 +51,11 @@ export default function AuthSection() {
       time: '10 min'
     },
 
-    // Right side - symmetric dispersion
     {
       id: 4,
-      type: 'received', // grey/other person
+      type: 'received', 
       size: 'medium',
-      horizontalOffset: '150px', // Near center right
+      horizontalOffset: '150px', 
       verticalOffset: '-100px',
       rotation: 3,
       delay: 0.8,
@@ -66,9 +65,9 @@ export default function AuthSection() {
     },
     {
       id: 5,
-      type: 'sent', // blue/iMessage style
+      type: 'sent', 
       size: 'small',
-      horizontalOffset: '250px', // Right middle
+      horizontalOffset: '250px',
       verticalOffset: '30px',
       rotation: 1,
       delay: 1.0,
@@ -78,9 +77,9 @@ export default function AuthSection() {
     },
     {
       id: 6,
-      type: 'received', // grey/other person
+      type: 'received', 
       size: 'large',
-      horizontalOffset: '330px', // Far right
+      horizontalOffset: '330px', 
       verticalOffset: '-110px',
       rotation: 3,
       delay: 1.2,
@@ -90,7 +89,6 @@ export default function AuthSection() {
     },
   ]
 
-  // Set up intersection observer
   useEffect(() => {
     if (!animationRef.current) return
 
@@ -98,24 +96,24 @@ export default function AuthSection() {
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Component is in view
+  
             isInView.current = true
 
-            // Reset and start animations
+  
             setHasStarted(true)
             setVisibleMessages([])
 
-            // Reset counter animation
+
             setCounter(0)
 
-            // Animate messages in sequence
+
             messages.forEach((msg) => {
               setTimeout(() => {
                 setVisibleMessages(prev => [...prev, msg.id])
               }, msg.delay * 1000)
             })
 
-            // Start counter animation
+
             const increment = Math.ceil(500000 / 100)
             const interval = setInterval(() => {
               setCounter(prev => {
@@ -128,20 +126,20 @@ export default function AuthSection() {
               })
             }, 30)
 
-            // Store interval ID for cleanup
+
             const intervalId = interval
 
-            // Cleanup when component goes out of view
+ 
             return () => clearInterval(intervalId)
           } else {
-            // Component is out of view
+ 
             isInView.current = false
             setHasStarted(false)
           }
         })
       },
       {
-        threshold: 0.2, // Trigger when 20% of the element is visible
+        threshold: 0.2, 
         rootMargin: '0px'
       }
     )
@@ -155,7 +153,6 @@ export default function AuthSection() {
     }
   }, [])
 
-  // Handle counter animation when hasStarted changes
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null
 
@@ -180,15 +177,12 @@ export default function AuthSection() {
     }
   }, [hasStarted, counter])
 
-  // Handle message animations when hasStarted changes
   useEffect(() => {
     let timers: NodeJS.Timeout[] = []
 
     if (hasStarted) {
-      // Clear any existing messages
       setVisibleMessages([])
 
-      // Stagger the appearance of all 6 messages
       timers = messages.map((msg) =>
         setTimeout(() => {
           setVisibleMessages(prev => [...prev, msg.id])
@@ -209,16 +203,14 @@ export default function AuthSection() {
 
   return (
     <section ref={animationRef} className="w-full py-20 bg-white relative overflow-hidden">
-      {/* Background gradient overlay to match message backgrounds */}
       <div className="absolute inset-0 bg-white pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4">
-        {/* Messages container - positioned across entire width */}
         <div className="absolute inset-0 hidden lg:block">
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
-              initial={false} // Don't use initial animation
+              initial={false} 
               animate={{
                 opacity: visibleMessages.includes(msg.id) ? 1 : 0,
                 x: visibleMessages.includes(msg.id) ? msg.horizontalOffset :
@@ -240,15 +232,14 @@ export default function AuthSection() {
                 marginLeft: msg.horizontalOffset
               }}
             >
-              {/* Message bubble */}
               <div className={`relative rounded-2xl p-3.5 shadow-lg backdrop-blur-[2px] border ${
                 msg.type === 'sent'
                   ? 'bg-gradient-to-br from-blue-50/95 to-blue-100/80 border-blue-200/60'
                   : 'bg-gradient-to-br from-neutral-50/95 to-neutral-100/80 border-neutral-200/60'
               }`}>
-                {/* Message content */}
+
                 <div className="relative z-10">
-                  {/* Message header */}
+
                   <div className="flex items-center gap-2 mb-2">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
                       msg.type === 'sent' ? 'bg-blue-500' : 'bg-neutral-600'
@@ -270,14 +261,14 @@ export default function AuthSection() {
                     </span>
                   </div>
 
-                  {/* Message text */}
+
                   <p className={`text-sm leading-snug mb-1.5 ${
                     msg.type === 'sent' ? 'text-blue-900' : 'text-neutral-900'
                   }`}>
                     {msg.content}
                   </p>
 
-                  {/* Message footer */}
+
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-1.5">
                       {msg.type === 'sent' ? (
@@ -296,7 +287,7 @@ export default function AuthSection() {
                   </div>
                 </div>
 
-                {/* Subtle gradient overlay */}
+
                 <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent rounded-2xl pointer-events-none ${
                   msg.type === 'sent' ? 'mix-blend-overlay' : 'mix-blend-soft-light'
                 }`} />
@@ -359,7 +350,6 @@ export default function AuthSection() {
                 transition={{ duration: 0.5 }}
                 className="space-y-10"
               >
-                {/* Header with subtle icon */}
                 <div className="text-center space-y-4">
                   <motion.h2
                     initial={{ opacity: 0, y: 10 }}
@@ -384,7 +374,7 @@ export default function AuthSection() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  {/* Phone Input with enhanced styling */}
+
                   <motion.div
                     className="relative group"
                     whileFocus={{ scale: 1.01 }}
@@ -414,11 +404,9 @@ export default function AuthSection() {
                       "
                     />
 
-                    {/* Subtle focus indicator */}
                     <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-focus-within:border-black/10 transition-colors duration-300"></div>
                   </motion.div>
 
-                  {/* Continue Button */}
                   <motion.button
                     type="submit"
                     whileHover={{ scale: 1.05 }}
@@ -450,7 +438,6 @@ export default function AuthSection() {
                     <ArrowRight className="w-4 h-4" />
                   </motion.button>
 
-                  {/* Privacy notice */}
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

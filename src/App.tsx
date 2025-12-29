@@ -6,7 +6,7 @@ import Try from './Try'
 import Features from './Features'
 import Steps from './Steps'
 
-// Updated words array to include dates, people, and relationship types
+
 const words = ['founders', 'investors', 'a date', 'friends', 'cofounders', 'mentors', 'clients', 'partners']
 
 function App() {
@@ -17,32 +17,32 @@ function App() {
   const measureRef = useRef<HTMLSpanElement>(null)
   const wordIndexRef = useRef(0)
 
-  // Animation interval for word cycling
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       setIsAnimating(true)
 
-      // Start fade out current word
+
       setTimeout(() => {
-        // Update to next word
+
         wordIndexRef.current = (wordIndexRef.current + 1) % words.length
         setCurrentWord(words[wordIndexRef.current])
 
-        // Set the word after next for smooth preparation
+
         const nextIndex = (wordIndexRef.current + 1) % words.length
         setNextWord(words[nextIndex])
 
-        // Reset width measurement
+ 
         if (measureRef.current) {
           setWidth(measureRef.current.offsetWidth)
         }
 
-        // Complete animation
+
         setTimeout(() => {
           setIsAnimating(false)
         }, 200)
       }, 400)
-    }, 3000) // Change word every 3 seconds
+    }, 3000) 
 
     return () => clearInterval(interval)
   }, [])
@@ -68,7 +68,6 @@ function App() {
   return (
     <div className="min-h-screen bg-white text-gray-900 font-poppins">
 
-      {/* Series Logo - Top Left */}
       <div className="fixed top-5 left-6 z-50">
         <div className="relative p-2 hover:scale-110 transition-transform duration-200 ease-out">
           <img
@@ -79,7 +78,6 @@ function App() {
         </div>
       </div>
 
-      {/* Series Button - Top Right */}
       <div className="fixed top-6 right-6 z-50">
         <button
           onClick={handleSeriesButtonClick}
@@ -96,7 +94,6 @@ function App() {
 
       <main className="pt-20 pb-40">
 
-        {/* Featured In */}
         <section className="max-w-5xl mx-auto px-6 mb-12">
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-14">
             {[
@@ -117,11 +114,9 @@ function App() {
           </div>
         </section>
 
-        {/* Floating Autoplay Video - FIXED FOR BORDER ISSUE */}
         <section className="w-full flex justify-center -mt-1">
           <div className="w-full max-w-4xl px-6">
             <div className="relative overflow-hidden bg-white">
-              {/* Main video container with negative margins to prevent edge artifacts */}
               <div className="relative overflow-hidden -mx-[2px] -my-[2px]">
                 <video
                   src="/videos/NewLandingPageAssets.mp4"
@@ -134,15 +129,12 @@ function App() {
                   style={{
                     display: 'block',
                     lineHeight: 0,
-                    // Ensure no sub-pixel edges
                     transform: 'translateZ(0)',
                     WebkitTransform: 'translateZ(0)',
                     MozTransform: 'translateZ(0)',
-                    // Force pixel snapping
                     backfaceVisibility: 'hidden',
                     WebkitBackfaceVisibility: 'hidden',
                     MozBackfaceVisibility: 'hidden',
-                    // Hide any potential edges
                     outline: 'none',
                     border: 'none',
                     boxShadow: 'none',
@@ -150,16 +142,16 @@ function App() {
                 />
               </div>
 
-              {/* Single white overlay on all sides to hide any remaining edges */}
+
               <div className="absolute inset-0 border-[2px] border-white pointer-events-none z-10"></div>
             </div>
           </div>
         </section>
 
-        {/* Animated Headline with CTA Buttons */}
+
         <section className="max-w-5xl mx-auto px-6">
           <div className="flex flex-col items-center justify-center">
-            {/* Headline */}
+
             <h1 className="text-[24px] sm:text-[32px] md:text-[40px] lg:text-[55px] xl:text-[80px] font-semibold tracking-tight leading-tight whitespace-nowrap pb-10 text-gray-700 pt-24">
               Smarter way to connect meet{' '}
               <span
@@ -169,9 +161,9 @@ function App() {
                   transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               >
-                {/* Main container with smooth opacity transition */}
+
                 <span className="relative inline-block">
-                  {/* Current word with fade out */}
+
                   <span
                     className="text-gray-500 inline-block transition-all duration-500 ease-out"
                     style={{
@@ -182,7 +174,7 @@ function App() {
                     {currentWord}
                   </span>
 
-                  {/* Next word with fade in */}
+
                   <span
                     className="text-gray-500 absolute top-0 left-0 inline-block transition-all duration-500 ease-out"
                     style={{
@@ -194,14 +186,14 @@ function App() {
                   </span>
                 </span>
 
-                {/* Invisible span for width measurement */}
+
                 <span ref={measureRef} className="invisible absolute whitespace-nowrap">
                   {currentWord}
                 </span>
               </span>
             </h1>
 
-            {/* Try it out Button */}
+
             <button
               onClick={handleTryItOutClick}
               className="px-10 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800 transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 shadow-lg mb-4"
@@ -209,7 +201,7 @@ function App() {
               Try it out
             </button>
 
-            {/* Account Text */}
+
             <div className="text-center">
               <span className="text-gray-400 text-sm">
                 Don't have an account yet?{' '}
@@ -224,7 +216,7 @@ function App() {
           </div>
         </section>
 
-        {/* Features Section - Imported from Features.tsx */}
+
         <Features />
 
 
